@@ -13,3 +13,8 @@ export interface IChatHeadData {
   lastOnline?: string;
   messages: IChatMessage[];
 }
+
+export interface ILoginData {
+  email: string;
+  password: string;
+}
