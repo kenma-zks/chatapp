@@ -1,50 +1,68 @@
+import { Link } from "react-router-dom";
 import bg from "../assets/loginbg.jpg";
 import logo from "../assets/logo.jpg";
+import { ILoginData } from "../Types/types";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 const Login = () => {
+  const { handleSubmit, register } = useForm<ILoginData>();
+
+  const onSubmit: SubmitHandler<ILoginData> = async (data) => {
+    console.log(data);
+  };
   return (
-    <div className="flex w-full h-screen">
-      <div className="flex md:flex-1 w-2/3 flex-row h-full bg-[#604E64]">
-        <img src={bg} className="w-full object-contain md:block hidden" />
+    <form
+      className="flex w-full h-screen bg-[#604E64]"
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <div className="lg:flex lg:flex-1 lg:w-2/3  flex-row h-full bg-[#604E64]">
+        <img src={bg} className="w-full object-contain lg:block hidden" />
       </div>
-      <div className="flex w-1/3 flex-row h-full px-[30px] py-[16px] bg-[#604E64]  ">
-        <div className="flex flex-col w-full py-[60px] items-center rounded-lg bg-white">
+      <div className="flex w-full lg:w-1/3 flex-row h-auto items-center justify-center px-[30px] py-[16px] bg-[#604E64]  ">
+        <div className="flex flex-col w-full px-[54px] py-[20px] items-center rounded-lg bg-white">
           <img
             src={logo}
             className="w-[80px] h-[80px] rounded-full border items-center justify-center object-cover "
           />
-          <div className="text-3xl font-bold mt-10 ">Welcome back!</div>
-          <div className="text-sm font-semibold text-[#707991] mt-2">
+          <div className="text-2xl md:text-3xl font-bold mt-10 ">
+            Welcome back!
+          </div>
+          <div className="text-xs md:text-sm font-semibold text-[#707991] mt-2">
             Please enter your details
           </div>
           <input
             type="text"
             placeholder="Email"
-            className="border-black border-b-2 mt-12 mb-4 w-80 py-2 focus:outline-none"
+            className="border-black border-b-2 mt-12 mb-4 w-full py-2 focus:outline-none"
+            {...register("email", { required: "Email is required" })}
           />
           <input
             type="password"
             placeholder="Password"
-            className="border-black border-b-2 w-80 py-2 focus:outline-none"
+            className="border-black border-b-2 w-full py-2 focus:outline-none"
+            {...register("password", { required: "Password is required" })}
           />
-          <div className="flex flex-row w-80 mt-4 items-center justify-between">
+          <div className="flex flex-row w-full mt-4 items-center justify-between">
             <label className="flex items-center justify-center space-x-2">
               <input
                 type="checkbox"
                 className="form-checkbox h-3 w-3 hover:cursor-pointer"
               />
-              <span className="text-sm font-semibold text-gray-600">
+              <span className="text-xs md:text-sm font-semibold text-gray-600">
                 Remember me
               </span>
             </label>
-            <div className="text-sm font-semibold text-gray-400 hover:cursor-pointer">
+            <div className="text-xs md:text-sm font-semibold text-gray-400 hover:cursor-pointer">
               Forgot Password?
             </div>
           </div>
-          <button className="h-12 bg-black w-80 mt-12 text-white font-semibold rounded-full">
-            Log In
+          <button
+            className="h-12 bg-black w-full mt-12 text-white font-semibold rounded-full"
+            type="submit"
+          >
+            <Link to="/home">Log In</Link>
           </button>
-          <button className="h-12 bg-[#d9dadb] w-80 mt-4 font-semibold rounded-full flex items-center justify-center gap-2">
+          <button className="h-12 bg-[#d9dadb] w-full mt-4 font-semibold rounded-full flex items-center justify-center gap-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               x="0px"
@@ -73,7 +91,7 @@ const Login = () => {
             Log In with Google
           </button>
 
-          <div className="flex mt-auto">
+          <div className="flex mt-20">
             <p className="text-sm font-semibold text-gray-600">
               Don't have an account?
               <span className="font-semibold cursor-pointer text-gray-900 px-1">
@@ -83,7 +101,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 
