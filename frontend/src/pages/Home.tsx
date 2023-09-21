@@ -6,12 +6,21 @@ import chatbg from "../assets/chatbg.jpg";
 import { useState } from "react";
 import { useAppDispatch } from "../store/hooks";
 import { setSearchQuery } from "../store/searchSlice";
+import { Link } from "react-router-dom";
+import { RiSettings4Fill } from "react-icons/ri";
+import { FiLogOut } from "react-icons/fi";
 
 const Home = () => {
   const [selectedChat, setSelectedChat] = useState<IChatHeadData | null>(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleChatHeadClick = (chatData: IChatHeadData) => {
     setSelectedChat(chatData);
+  };
+
+  const handleMenuClick = () => {
+    setIsMenuOpen(!isMenuOpen);
+    console.log("Menu opened");
   };
 
   const dispatch = useAppDispatch();
@@ -20,11 +29,34 @@ const Home = () => {
     dispatch(setSearchQuery(searchTerm));
   };
 
+  const menuContent = isMenuOpen ? (
+    <div className="absolute top-10 left-10 w-60 bg-white border-gray-100 border h-auto flex flex-col px-[8px] py-[8px] gap-[12px] shadow-lg rounded-lg">
+      <div className="w-full flex flex-row items-center justify-start gap-[10px] px-[4px] py-[4px] rounded-md h-10 hover:cursor-pointer hover:bg-[#F5F5F5]">
+        <div className="rounded-full bg-gray-200 w-[30px] h-[30px] px-[6px] py-[6px]  flex items-center justify-center">
+          <RiSettings4Fill className="w-full h-full" />
+        </div>
+        Preferences
+      </div>
+      <div className="w-full border ml-[4px] border-gray-300 " />
+      <div className="w-full flex flex-row items-center justify-start px-[4px] py-[4px] gap-[10px] rounded-md h-10 hover:cursor-pointer hover:bg-[#F5F5F5]">
+        <div className="rounded-full bg-gray-200 w-[30px] h-[30px] px-[6px] py-[6px]  flex items-center justify-center">
+          <FiLogOut className="w-full h-full" />
+        </div>
+        <Link to="/login">Logout</Link>
+      </div>
+    </div>
+  ) : null;
+
   return (
     <div className="flex h-screen w-full">
       <div className="flex flex-col border-r-2 border-solid border-[#D9DCE0] ">
         <div className="flex flex-row w-[364px] h-[56px] px-[16px] py-[8px] items-center gap-[16px] flex-shrink-0 self-stretch bg-white ">
-          <div className="flex w-[40px] h-[40px] flex-shrink-0 items-center justify-center">
+          <div
+            className={`flex w-[40px] h-[40px] flex-shrink-0 items-center justify-center hover:cursor-pointer hover:bg-[#F5F5F5] bg-${
+              isMenuOpen ? "[#F5F5F5]" : "white"
+            }`}
+            onClick={handleMenuClick}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -38,6 +70,7 @@ const Home = () => {
               />
             </svg>
           </div>
+          {menuContent}
           <Searchbar onSubmit={handleSearch} />
         </div>
         <div className="flex-grow overflow-y-auto ">
