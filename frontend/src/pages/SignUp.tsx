@@ -1,8 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import bg from "../assets/loginbg.jpg";
 import logo from "../assets/logo.jpg";
-import { ILoginData, IRegisterData } from "../Types/types";
+import { IRegisterData } from "../Types/types";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { registerMutation } from "../api/api";
+import { useMutation } from "react-query";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SignUp = () => {
   const {
@@ -12,8 +16,38 @@ const SignUp = () => {
     watch,
   } = useForm<IRegisterData>();
 
-  const onSubmit: SubmitHandler<ILoginData> = async (data) => {
-    console.log(data);
+  const navigate = useNavigate();
+
+  const { mutateAsync } = useMutation<IRegisterData, Error, IRegisterData>(
+    registerMutation,
+    {
+      onSuccess: (data) => {
+        console.log(data);
+        navigate("/login");
+        toast.success("Registration successful", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 2000,
+          hideProgressBar: true,
+        });
+      },
+      onError: (error) => {
+        const errorMessage = error as unknown as string;
+
+        toast.error(errorMessage, {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 2000,
+          hideProgressBar: true,
+        });
+      },
+    }
+  );
+
+  const onSubmit: SubmitHandler<IRegisterData> = async (data) => {
+    try {
+      await mutateAsync(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <form
@@ -89,7 +123,7 @@ const SignUp = () => {
             className="h-12 bg-black w-full mt-12 text-white font-semibold rounded-full"
             type="submit"
           >
-            <Link to="/home">Sign Up</Link>
+            Sign Up
           </button>
           <button className="h-12 bg-[#d9dadb] w-full mt-4 font-semibold rounded-full flex items-center justify-center gap-2">
             <svg
@@ -130,6 +164,7 @@ const SignUp = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </form>
   );
 };

@@ -6,9 +6,11 @@ import chatbg from "../assets/chatbg.jpg";
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "../store/hooks";
 import { setSearchQuery } from "../store/searchSlice";
-import { Link } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { RiSettings4Fill } from "react-icons/ri";
 import { FiLogOut } from "react-icons/fi";
+import { useQuery } from "react-query";
+import { getUser } from "../api/api";
 
 const Home = () => {
   const [selectedChat, setSelectedChat] = useState<IChatHeadData | null>(null);
@@ -23,6 +25,16 @@ const Home = () => {
   };
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { data: user } = useQuery({
+    queryKey: ["user"],
+    queryFn: getUser,
+  });
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    navigate("/login");
+  };
 
   const handleSearch = (searchTerm: string) => {
     dispatch(setSearchQuery(searchTerm));
@@ -57,12 +69,16 @@ const Home = () => {
         </div>
         Preferences
       </div>
+      <div>{user?.username}</div>
       <div className="w-full border ml-[4px] border-gray-300 " />
-      <div className="w-full flex flex-row items-center justify-start px-[4px] py-[4px] gap-[10px] rounded-md h-10 hover:cursor-pointer hover:bg-[#F5F5F5]">
+      <div
+        className="w-full flex flex-row items-center justify-start px-[4px] py-[4px] gap-[10px] rounded-md h-10 hover:cursor-pointer hover:bg-[#F5F5F5]"
+        onClick={handleLogout}
+      >
         <div className="rounded-full bg-gray-200 w-[30px] h-[30px] px-[6px] py-[6px]  flex items-center justify-center">
           <FiLogOut className="w-full h-full" />
         </div>
-        <Link to="/login">Logout</Link>
+        Logout
       </div>
     </div>
   ) : null;
@@ -104,6 +120,7 @@ const Home = () => {
           <img src={chatbg} alt="Chat Background" className="object-cover" />
         )}
       </div>
+      <Outlet />
     </div>
   );
 };

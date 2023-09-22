@@ -25,3 +25,14 @@ export interface IRegisterData {
   password: string;
   confirmPassword: string;
 }
+
+export interface tokenState {
+  accessToken: string;
+}
+
+export interface authState {
+  authTokens: tokenState | null;
+  user: null | {
+    _id: string;
+  };
+}

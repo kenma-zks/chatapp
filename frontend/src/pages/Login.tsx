@@ -1,14 +1,48 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import bg from "../assets/loginbg.jpg";
 import logo from "../assets/logo.jpg";
 import { ILoginData } from "../Types/types";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useAppDispatch } from "../store/hooks";
+import { useMutation } from "react-query";
+import { loginMutation } from "../api/api";
+import { authActions } from "../store/authSlice";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const { handleSubmit, register } = useForm<ILoginData>();
 
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { mutateAsync } = useMutation({
+    mutationFn: loginMutation,
+    onSuccess: (data) => {
+      const accessToken: string = data.accessToken;
+      dispatch(authActions.login({ accessToken }));
+      localStorage.setItem("authToken", accessToken);
+      navigate("/home");
+      toast.success("Login successful", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 2000,
+        hideProgressBar: true,
+      });
+    },
+    onError: (error: any) => {
+      toast.error(error.response.data.message, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 2000,
+        hideProgressBar: true,
+      });
+    },
+  });
+
   const onSubmit: SubmitHandler<ILoginData> = async (data) => {
-    console.log(data);
+    try {
+      await mutateAsync(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <form
@@ -60,7 +94,7 @@ const Login = () => {
             className="h-12 bg-black w-full mt-12 text-white font-semibold rounded-full"
             type="submit"
           >
-            <Link to="/home">Log In</Link>
+            Log In
           </button>
           <button className="h-12 bg-[#d9dadb] w-full mt-4 font-semibold rounded-full flex items-center justify-center gap-2">
             <svg
@@ -101,6 +135,7 @@ const Login = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </form>
   );
 };
