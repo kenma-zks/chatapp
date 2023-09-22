@@ -1,11 +1,16 @@
 import { Link } from "react-router-dom";
 import bg from "../assets/loginbg.jpg";
 import logo from "../assets/logo.jpg";
-import { ILoginData } from "../Types/types";
+import { ILoginData, IRegisterData } from "../Types/types";
 import { SubmitHandler, useForm } from "react-hook-form";
 
-const Login = () => {
-  const { handleSubmit, register } = useForm<ILoginData>();
+const SignUp = () => {
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+    watch,
+  } = useForm<IRegisterData>();
 
   const onSubmit: SubmitHandler<ILoginData> = async (data) => {
     console.log(data);
@@ -24,43 +29,67 @@ const Login = () => {
             src={logo}
             className="w-[80px] h-[80px] rounded-full border items-center justify-center object-cover "
           />
-          <div className="text-2xl md:text-3xl font-bold mt-10 ">
-            Welcome back!
-          </div>
+          <div className="text-2xl md:text-3xl font-bold mt-10 ">Sign Up</div>
           <div className="text-xs md:text-sm font-semibold text-[#707991] mt-2">
             Please enter your details
           </div>
-          <input
-            type="text"
-            placeholder="Email"
-            className="border-black border-b-2 mt-12 mb-4 w-full py-2 focus:outline-none"
-            {...register("email", { required: "Email is required" })}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            className="border-black border-b-2 w-full py-2 focus:outline-none"
-            {...register("password", { required: "Password is required" })}
-          />
-          <div className="flex flex-row w-full mt-4 items-center justify-between">
-            <label className="flex items-center justify-center space-x-2">
-              <input
-                type="checkbox"
-                className="form-checkbox h-3 w-3 hover:cursor-pointer"
-              />
-              <span className="text-xs md:text-sm font-semibold text-gray-600">
-                Remember me
-              </span>
-            </label>
-            <div className="text-xs md:text-sm font-semibold text-gray-400 hover:cursor-pointer">
-              Forgot Password?
-            </div>
+          <div className="flex flex-col w-full mt-10">
+            <input
+              type="text"
+              placeholder="Username"
+              className="border-black border-b-2 mb-4 w-full py-2 focus:outline-none"
+              {...register("username", { required: "Name is required" })}
+            />
+            {
+              <p className="text-red-500 text-xs">
+                {errors?.username?.message}
+              </p>
+            }
+            <input
+              type="email"
+              placeholder="Email"
+              className="border-black border-b-2 mb-4 w-full py-2 focus:outline-none "
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Invalid email address",
+                },
+              })}
+            />
+            {<p className="text-red-500 text-xs">{errors?.email?.message}</p>}
+            <input
+              type="password"
+              placeholder="Password"
+              className="border-black border-b-2 mb-4 w-full py-2 focus:outline-none"
+              {...register("password", { required: "Password is required" })}
+            />
+            {
+              <p className="text-red-500 text-xs">
+                {errors?.password?.message}
+              </p>
+            }
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              className="border-black border-b-2 mb-4 w-full py-2 focus:outline-none"
+              {...register("confirmPassword", {
+                required: "Password is required",
+                validate: (value) =>
+                  value === watch("password") || "The passwords do not match",
+              })}
+            />
+            {
+              <p className="text-red-500 text-xs">
+                {errors?.confirmPassword?.message}
+              </p>
+            }
           </div>
           <button
             className="h-12 bg-black w-full mt-12 text-white font-semibold rounded-full"
             type="submit"
           >
-            <Link to="/home">Log In</Link>
+            <Link to="/home">Sign Up</Link>
           </button>
           <button className="h-12 bg-[#d9dadb] w-full mt-4 font-semibold rounded-full flex items-center justify-center gap-2">
             <svg
@@ -93,9 +122,9 @@ const Login = () => {
 
           <div className="flex mt-20">
             <p className="text-sm font-semibold text-gray-600">
-              Don't have an account?
+              Already have an account?
               <span className="font-semibold cursor-pointer text-gray-900 px-1">
-                <Link to="/register">Sign Up</Link>
+                <Link to="/login">Sign In</Link>
               </span>
             </p>
           </div>
@@ -105,4 +134,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;

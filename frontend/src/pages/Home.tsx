@@ -3,7 +3,7 @@ import Chatbox from "../UI/Chatbox";
 import Chatlist from "../UI/Chatlist";
 import Searchbar from "../UI/Searchbar";
 import chatbg from "../assets/chatbg.jpg";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "../store/hooks";
 import { setSearchQuery } from "../store/searchSlice";
 import { Link } from "react-router-dom";
@@ -20,7 +20,6 @@ const Home = () => {
 
   const handleMenuClick = () => {
     setIsMenuOpen(!isMenuOpen);
-    console.log("Menu opened");
   };
 
   const dispatch = useAppDispatch();
@@ -29,8 +28,29 @@ const Home = () => {
     dispatch(setSearchQuery(searchTerm));
   };
 
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      setIsMenuOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const menuContent = isMenuOpen ? (
-    <div className="absolute top-10 left-10 w-60 bg-white border-gray-100 border h-auto flex flex-col px-[8px] py-[8px] gap-[12px] shadow-lg rounded-lg">
+    <div
+      ref={dropdownRef}
+      className="absolute top-10 left-10 w-60 bg-white border-gray-100 border h-auto flex flex-col px-[8px] py-[8px] gap-[12px] shadow-lg rounded-lg"
+    >
       <div className="w-full flex flex-row items-center justify-start gap-[10px] px-[4px] py-[4px] rounded-md h-10 hover:cursor-pointer hover:bg-[#F5F5F5]">
         <div className="rounded-full bg-gray-200 w-[30px] h-[30px] px-[6px] py-[6px]  flex items-center justify-center">
           <RiSettings4Fill className="w-full h-full" />
