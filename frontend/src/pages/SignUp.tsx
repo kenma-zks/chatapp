@@ -23,6 +23,7 @@ const SignUp = () => {
     {
       onSuccess: (data) => {
         console.log(data);
+        localStorage.setItem("registrationSuccess", "true");
         navigate("/login");
         toast.success("Registration successful", {
           position: toast.POSITION.TOP_CENTER,
@@ -30,10 +31,8 @@ const SignUp = () => {
           hideProgressBar: true,
         });
       },
-      onError: (error) => {
-        const errorMessage = error as unknown as string;
-
-        toast.error(errorMessage, {
+      onError: (error: any) => {
+        toast.error(error.response.data.message, {
           position: toast.POSITION.TOP_CENTER,
           autoClose: 2000,
           hideProgressBar: true,

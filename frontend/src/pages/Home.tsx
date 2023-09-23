@@ -11,6 +11,8 @@ import { RiSettings4Fill } from "react-icons/ri";
 import { FiLogOut } from "react-icons/fi";
 import { useQuery } from "react-query";
 import { getUser } from "../api/api";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Home = () => {
   const [selectedChat, setSelectedChat] = useState<IChatHeadData | null>(null);
@@ -120,6 +122,7 @@ const Home = () => {
           <img src={chatbg} alt="Chat Background" className="object-cover" />
         )}
       </div>
+      <ToastContainer />
       <Outlet />
     </div>
   );

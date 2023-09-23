@@ -9,6 +9,7 @@ import { loginMutation } from "../api/api";
 import { authActions } from "../store/authSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useEffect } from "react";
 
 const Login = () => {
   const { handleSubmit, register } = useForm<ILoginData>();
@@ -22,11 +23,6 @@ const Login = () => {
       dispatch(authActions.login({ accessToken }));
       localStorage.setItem("authToken", accessToken);
       navigate("/home");
-      toast.success("Login successful", {
-        position: toast.POSITION.TOP_CENTER,
-        autoClose: 2000,
-        hideProgressBar: true,
-      });
     },
     onError: (error: any) => {
       toast.error(error.response.data.message, {
@@ -44,6 +40,21 @@ const Login = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    const registrationSuccess = localStorage.getItem("registrationSuccess");
+
+    if (registrationSuccess === "true") {
+      toast.success("Registration successful", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 2000,
+        hideProgressBar: true,
+      });
+
+      localStorage.removeItem("registrationSuccess");
+    }
+  }, []);
+
   return (
     <form
       className="flex w-full h-screen bg-[#604E64]"

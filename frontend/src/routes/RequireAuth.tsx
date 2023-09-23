@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { RootState } from "../store/store";
 import { useAppSelector } from "../store/hooks";
 
@@ -8,11 +8,7 @@ const RequireAuth: React.FC<{ element: React.ReactNode }> = ({ element }) => {
     (state: RootState) => state.auth.authTokens
   );
 
-  return authTokens ? (
-    <Route element={element} />
-  ) : (
-    <Navigate to="/login" replace />
-  );
+  return authTokens ? <>{element}</> : <Navigate to="/login" replace />;
 };
 
 export default RequireAuth;
