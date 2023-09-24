@@ -154,7 +154,7 @@ const SignUp = () => {
           </button>
 
           <div className="flex mt-20">
-            <p className="text-sm font-semibold text-gray-600">
+            <p className="text-xs md:text-sm font-semibold text-gray-600">
               Already have an account?
               <span className="font-semibold cursor-pointer text-gray-900 px-1">
                 <Link to="/login">Sign In</Link>

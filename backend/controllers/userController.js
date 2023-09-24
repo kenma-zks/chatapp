@@ -37,7 +37,7 @@ const registerUser = async (req, res) => {
   if (!username || !email || !password) {
     res.status(400).json({ message: "Please enter all fields" });
   }
-  const userAvailable = await User.findOne({ email });
+  const userAvailable = await User.findOne({ email, username });
   if (userAvailable) {
     res.status(400).json({ message: "User already exists" });
   }
