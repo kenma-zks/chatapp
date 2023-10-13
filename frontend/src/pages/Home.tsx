@@ -35,7 +35,7 @@ const Home = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
-    navigate("/login");
+    navigate("/");
   };
 
   const handleSearch = (searchTerm: string) => {

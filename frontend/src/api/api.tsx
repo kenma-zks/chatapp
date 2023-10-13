@@ -14,6 +14,15 @@ export const getUser = async () => {
   return response.data;
 };
 
+export const getAllUsersWithChatData = async () => {
+  const response = await instance.get("/users/allWithChatData", {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+    },
+  });
+  return response.data;
+};
+
 export const loginMutation = async (loginData: ILoginData) => {
   const response = await instance.post("/users/login", loginData);
   return response.data;

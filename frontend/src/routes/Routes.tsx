@@ -10,7 +10,7 @@ const router = createBrowserRouter([
     element: <RequireAuth element={<Home />} />,
   },
   {
-    path: "/login",
+    path: "/",
     element: <Login />,
   },
   {

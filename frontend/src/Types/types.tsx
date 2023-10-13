@@ -6,7 +6,7 @@ export interface IChatMessage {
 
 export interface IChatHeadData {
   id: number;
-  Name: string;
+  username: string;
   Date: Date;
   Time: string;
   Image: string | null;
@@ -35,4 +35,11 @@ export interface authState {
   user: null | {
     _id: string;
   };
+}
+
+export interface IUserData {
+  _id: number;
+  email: string;
+  username: string;
+  chatData: IChatHeadData[];
 }

@@ -24,7 +24,7 @@ const SignUp = () => {
       onSuccess: (data) => {
         console.log(data);
         localStorage.setItem("registrationSuccess", "true");
-        navigate("/login");
+        navigate("/");
         toast.success("Registration successful", {
           position: toast.POSITION.TOP_CENTER,
           autoClose: 2000,

@@ -9,6 +9,10 @@ const Chatbox = ({
   chatData: IChatHeadData;
   backgroundImage: string;
 }) => {
+  if (!chatData || !chatData.messages) {
+    return null;
+  }
+
   const messages = chatData.messages;
 
   function formatDate(date: Date) {
@@ -43,7 +47,7 @@ const Chatbox = ({
           />
           <div className="w-full">
             <div className="w-auto h-[20px] text-[16px] font-semibold line-[20px] pb-[4px]">
-              {chatData.Name}
+              {chatData.username}
             </div>
             <div className="w-auto h-[20px] text-[#707991] text-[14px] line-[18px]">
               {chatData.lastOnline}
