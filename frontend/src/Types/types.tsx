@@ -5,7 +5,7 @@ export interface IChatMessage {
 }
 
 export interface IChatHeadData {
-  id: number;
+  _id: number;
   username: string;
   Date: Date;
   Time: string;

@@ -2,9 +2,7 @@ import { useQuery } from "react-query";
 import { IChatHeadData, IUserData } from "../Types/types";
 import { getAllUsersWithChatData } from "../api/api";
 import avatar from "../assets/avatar.svg";
-// import { dummyData } from "../assets/data";
 import { useAppSelector } from "../store/hooks";
-// import { useState, useEffect } from "react";
 
 const Chatlist = ({
   handleChatHeadClick,

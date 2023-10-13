@@ -15,24 +15,41 @@ const Chatbox = ({
 
   const messages = chatData.messages;
 
-  function formatDate(date: Date) {
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
+  function formatDate(date: Date | null | undefined) {
+    if (!date || !(date instanceof Date)) {
+      return "";
+    }
 
-    if (date.toDateString() === today.toDateString()) {
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+
+    const yesterday = new Date(today);
+    yesterday.setUTCDate(today.getUTCDate() - 1);
+
+    const dateUTC = new Date(date);
+    dateUTC.setUTCHours(0, 0, 0, 0);
+
+    if (
+      dateUTC.toISOString().split("T")[0] === today.toISOString().split("T")[0]
+    ) {
       return "Today";
-    } else if (date.toDateString() === yesterday.toDateString()) {
+    } else if (
+      dateUTC.toISOString().split("T")[0] ===
+      yesterday.toISOString().split("T")[0]
+    ) {
       return "Yesterday";
     } else {
       const options: Intl.DateTimeFormatOptions = {
         year: "numeric",
         month: "short",
         day: "numeric",
+        timeZone: "UTC", // Set the time zone explicitly to UTC
       };
       return date.toLocaleDateString(undefined, options);
     }
   }
+
+  const chatDataDate = new Date(chatData.Date);
 
   return (
     <div
@@ -109,7 +126,7 @@ const Chatbox = ({
       <div className="flex flex-col w-[694px] h-full py-[24px] gap-[16px] mt-auto ">
         <div className="flex justify-center mt-auto">
           <div className="flex flex-col px-[12px] py-[4px] bg-[#3D70B8] bg-opacity-60 rounded-2xl text-[#FFF] text-[16px] line-[20px] items-center justify-center">
-            <p>{formatDate(chatData.Date)}</p>
+            <p>{formatDate(chatDataDate)}</p>
           </div>
         </div>
         {messages.map((message, index) => (

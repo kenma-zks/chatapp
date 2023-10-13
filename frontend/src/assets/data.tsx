@@ -7,7 +7,7 @@ export const dummyData: IUserData[] = [
     email: "jessica@gmail.com",
     chatData: [
       {
-        id: 1,
+        _id: 1,
         username: "Jessica Drew",
         Time: "19:48",
         Date: new Date("2023-09-18"),
@@ -45,7 +45,7 @@ export const dummyData: IUserData[] = [
     email: "john@gmail.com",
     chatData: [
       {
-        id: 2,
+        _id: 2,
         username: "John Doe",
         Time: "",
         Date: new Date(""),
